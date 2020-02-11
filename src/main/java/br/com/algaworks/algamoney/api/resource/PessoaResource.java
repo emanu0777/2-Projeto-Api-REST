@@ -6,10 +6,8 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -62,7 +60,7 @@ public class PessoaResource {
 		Optional <Pessoa> pessoaSalva = pessoaRepository.findById(id);
 		
 		if(pessoaSalva.isEmpty()) {
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.notFound().build();
 		}
 		
 		return ResponseEntity.ok(pessoaSalva.get());
@@ -79,5 +77,13 @@ public class PessoaResource {
 		Pessoa pessoaSalva = pessoaService.atualizar(codigo, pessoa);
 		pessoaRepository.save(pessoaSalva);
 		return ResponseEntity.ok(pessoaSalva);
+	}
+	
+	@PutMapping("/{codigo}/ativo")
+	public ResponseEntity<Pessoa> atualizaCampoAtivo(@PathVariable Long codigo, @Valid @RequestBody Boolean ativo){
+		Pessoa pessoaSalva  = pessoaService.atualizarCampoAtivo(codigo,ativo);
+		pessoaRepository.save(pessoaSalva);
+		return ResponseEntity.noContent().build();
+		
 	}
 }

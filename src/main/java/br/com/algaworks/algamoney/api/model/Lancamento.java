@@ -15,6 +15,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 @Entity
@@ -26,24 +29,34 @@ public class Lancamento {
 	private Long codigo;
 	
 	@NotNull
-	@Max(50)
+	@Size(max=50, min=5)
 	private String descricao;
-
+	
+	@NotNull
 	@Column(name = "data_vencimento")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dataVencimento;
 	
 	@Column(name = "data_pagamento")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dataPagamento;
 	
+	@Size(min=10, max = 50)
+	private String observacao;
+	
+	@NotNull
 	private BigDecimal valor;
 	
+	@NotNull
 	@Enumerated(EnumType.STRING)
 	private TipoLancamento tipo;
 	
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "codigo_categoria")
 	private Categoria categoria;
 	
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "codigo_pessoa")
 	private Pessoa pesssoa;
